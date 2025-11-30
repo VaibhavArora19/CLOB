@@ -10,3 +10,7 @@
 - Native stress test
   Time = 100-300ns(per request)
   Total requests per second - 511548
+
+- Requests together(ws and native)
+  Total requests over ws - 6136
+  Total native requests - 602218
