@@ -3,7 +3,7 @@ pub trait ConfigTrait {
 }
 
 pub struct ClobConfig {
-    port: String,
+    pub port: String,
 }
 
 #[derive(thiserror::Error, Debug)]

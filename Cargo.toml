@@ -15,3 +15,8 @@ anyhow = "1.0.100"
 serde = { version = "1.0.228", features = ["derive"]}
 serde_json = "1.0.145"
 futures-util = "0.3.31"
+criterion = "0.8.0"
+
+[[bench]]
+name="clob_benchmark"
+harness=false
