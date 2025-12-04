@@ -1,12 +1,11 @@
 use anyhow::Error;
 use clob::{
-    config::{ClobConfig, ConfigTrait},
-    order_book::OrderBook,
-    websocket,
+    config::{ClobConfig, ConfigTrait}, db::{Tables, connect_db}, order_book::OrderBook, websocket
 };
 use tokio::signal::{self};
 
 use crate::websocket::handle_request;
+
 
 async fn create_ws_connection(port: String, order_book: OrderBook) {
     log::info!("Connecting to websocket at port: {:?}", port);
@@ -27,10 +26,10 @@ async fn main() -> Result<(), Error> {
 
     let config = ClobConfig::get_config();
 
+    let db = connect_db::<Tables>()?;
+
+    // rw_txn.put("table", "price", "data", flags);
     let order_book = OrderBook::new();
-
-    
-
 
     //fill the orders here
     //example -
