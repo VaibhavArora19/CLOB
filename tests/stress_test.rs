@@ -1,24 +1,28 @@
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use clob::{order::{Order, Side}, order_book::OrderBook};
+use clob::{
+    order::{Order, Side},
+    order_book::OrderBook,
+};
 use futures_util::{SinkExt, StreamExt};
 use serde_json::json;
 use tokio::time::Instant;
-use tokio_tungstenite::{connect_async};
+use tokio_tungstenite::connect_async;
 
 #[tokio::test]
 pub async fn stress_test_over_ws() {
-    let (mut socket, _) =
-        connect_async("ws://localhost:8000").await.expect("Failed to connect to websocket");
+    let (mut socket, _) = connect_async("ws://localhost:8000")
+        .await
+        .expect("Failed to connect to websocket");
 
     log::info!("Connected to the server");
 
     println!("Starting stress test over websocket....");
 
     let timestamp = SystemTime::now()
-                    .duration_since(UNIX_EPOCH)
-                    .unwrap()
-                    .as_secs();
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
 
     let duration = Duration::from_secs(1);
     let start = Instant::now();
@@ -26,7 +30,6 @@ pub async fn stress_test_over_ws() {
     let mut total_requests = 0;
 
     for i in 0..1000000 {
-
         if start.elapsed() < duration {
             let msg = json!({
                 "id": i,
@@ -35,16 +38,17 @@ pub async fn stress_test_over_ws() {
                 "price": 100,
                 "quantity": 1,
                 "timestamp": timestamp
-            }).to_string();
-            
+            })
+            .to_string();
+
             let single_start = Instant::now();
-            
+
             socket.send(msg.into()).await.unwrap();
-            
+
             let _resp = socket.next().await.unwrap();
-            
+
             let rtt = single_start.elapsed();
-            
+
             println!("RTT over ws: {:?}", rtt);
 
             total_requests += 1;
@@ -56,13 +60,12 @@ pub async fn stress_test_over_ws() {
 
 #[tokio::test]
 pub async fn stress_test() {
-
     println!("Starting native stress test....");
 
     let timestamp = SystemTime::now()
-                    .duration_since(UNIX_EPOCH)
-                    .unwrap()
-                    .as_secs();
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
 
     let duration = Duration::from_secs(1);
     let start = Instant::now();
@@ -73,7 +76,6 @@ pub async fn stress_test() {
 
     for i in 0..10000000 {
         if start.elapsed() < duration {
-
             let single_start = Instant::now();
             let side = {
                 if total_requests & 1 != 0 {
@@ -91,9 +93,9 @@ pub async fn stress_test() {
                 quantity: 10,
                 timestamp,
             });
-            
+
             let rtt = single_start.elapsed();
-            
+
             println!("Native RTT: {:?}", rtt);
 
             total_requests += 1;

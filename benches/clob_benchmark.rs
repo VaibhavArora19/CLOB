@@ -9,9 +9,9 @@ use criterion::{Criterion, criterion_group, criterion_main};
 fn criterion_benchmark(c: &mut Criterion) {
     let mut order_book = OrderBook::new();
     let timestamp = SystemTime::now()
-                    .duration_since(UNIX_EPOCH)
-                    .unwrap()
-                    .as_secs();
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
 
     c.bench_function("Limit order", |b| {
         b.iter(|| {
@@ -25,9 +25,7 @@ fn criterion_benchmark(c: &mut Criterion) {
             })
         })
     });
-
 }
-
 
 criterion_group!(benches, criterion_benchmark);
 criterion_main!(benches);

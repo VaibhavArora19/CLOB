@@ -5,8 +5,8 @@ use crate::{
 
 #[derive(Debug, Clone)]
 pub struct OrderBook {
-    bids: BookSide,
-    asks: BookSide,
+    pub bids: BookSide,
+    pub asks: BookSide,
     next_order_id: OrderId,
 }
 
